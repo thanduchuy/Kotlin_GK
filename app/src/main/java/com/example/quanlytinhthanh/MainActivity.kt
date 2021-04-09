@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -26,9 +27,17 @@ class MainActivity : AppCompatActivity() {
         val layoutManager1 = GridLayoutManager(this, 2)
         layoutManager1.orientation = LinearLayoutManager.VERTICAL
         recyclerView.layoutManager = layoutManager1
-        var adapter = MainAdapter(this, Supplier.data)
-        adapter.notifyDataSetChanged()
+        var adapter = MainAdapter( Supplier.data)
         recyclerView.adapter = adapter
+        adapter.setOnClickItem {
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("id",it.id)
+            intent.putExtra("name", it.name)
+            intent.putExtra("population", it.population)
+            intent.putExtra("description", it.description)
+            intent.putExtra("image", it.image)
+            startActivityForResult(intent,REQUEST_CODE)
+        }
 
         bundle?.let {
             adapter.notifyDataSetChanged()
@@ -56,6 +65,9 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE){
             uriImage = data?.data
             imageView.setImageURI(data?.data) // handle chosen image
+        }
+        if (resultCode == 2){
+            Log.e("data",data?.getStringExtra("url"))
         }
     }
 

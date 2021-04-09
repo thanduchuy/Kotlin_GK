@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_main.*
+import java.net.URL
 
 class DetailActivity : AppCompatActivity() {
     val REQUEST_CODE = 100
@@ -43,11 +44,13 @@ class DetailActivity : AppCompatActivity() {
                     val index = Supplier.data.indexOf(element)
                     var newData = element
                     newData.image = uriImage!!
-                    Supplier.data.set(index, newData)
-
-                    onBackPressed()
+                    setResult(2,Intent().apply {
+                        putExtra("index",index)
+                        putExtra("url",uriImage.toString())
+                    })
                 }
             }
+
         }
     }
 }
